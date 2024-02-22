@@ -242,7 +242,7 @@ main() {
 
     # ubuntu 22.04 build require moby/buildkit version greater than 0.8.1
     if ! docker buildx inspect cuda; then
-        run_cmd docker buildx create --use --platform linux/x86_64,linux/arm64,linux/ppc64le --driver-opt image=moby/buildkit:v0.10.3 --name cuda --node cuda
+        run_cmd docker buildx create --use --platform linux/x86_64,linux/arm64,linux/ppc64le --driver-opt image=moby/buildkit:v0.10.3 --driver-opt network=host --name cuda --node cuda
     fi
 
     if [[ ${build_cudagl} -eq 0 ]]; then
@@ -262,6 +262,7 @@ main() {
             -t "${IMAGE_NAME}:${CUDA_VERSION}-devel-${OS}${OS_VERSION}${IMAGE_SUFFIX:+-${IMAGE_SUFFIX}}" \
             --build-arg "IMAGE_NAME=${IMAGE_NAME}" \
             "${BASE_PATH}/${OS_PATH_NAME}/devel"
+
 
         msg "${script_name} END"
     else
